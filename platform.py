@@ -2,22 +2,20 @@ import pygame
 import random
 
 class Platform(object):
-    def __init__(self, game):
+    def __init__(self, game, x, y, platform_width):
         # inicjalizacja
         self.game = game
 
         # parametry
-        self.x = 100
-        self.y = self.game.screen_y - 100
-        self.platform_width = 600
+        self.x = x
+        self.y = y
+        self.platform_width = platform_width
         self.platform_height = 15
         self.color = (60, 60, 60)
+        self.under_player = False
 
         # obrazy
         self.platform = pygame.Rect(self.x, self.y, self.platform_width, self.platform_height)
-
-        # x = random.randint(0, self.screen_x - platform_width)  # Losowa pozycja X
-        # y = random.randint(0, self.game.screen_y - platform_height)  # Losowa pozycja Y
 
     def tick(self):
         pass

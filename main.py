@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame, sys, random
 from player import Player
 from platform import Platform
 
@@ -13,8 +13,18 @@ class Game(object):
         pygame.init()
         self.screen = pygame.display.set_mode((self.screen_x, self.screen_y))
         self.clock = pygame.time.Clock()
+        self.platrorma_startowa = Platform(self, 100, self.screen_y - 100, 600)
+        self.platforms = []
+        min_distance = 100 # minimalna odległość między platformami
+        offtop = 40
+        y_position = self.screen_y - 100
         self.player = Player(self)
-        self.platrorma_startowa = Platform(self)
+
+        for i in range(4):
+            x = random.randint(100, 600)
+            y_position = y_position - min_distance - random.randint(0, offtop)
+            width = random.randint(70, 150)
+            self.platforms.append(Platform(self, x, y_position, width))
 
         # obrazy
         self.tlo = pygame.image.load("obrazki/tlo2.png").convert()
@@ -40,8 +50,10 @@ class Game(object):
 
     def draw(self):
         self.screen.blit(self.tlo, (0, 0))
-        self.player.draw()
         self.platrorma_startowa.draw()
+        for i in self.platforms:
+            i.draw()
+        self.player.draw()
 
 
 Game()
