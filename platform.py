@@ -1,5 +1,4 @@
 import pygame
-import random
 
 class Platform(object):
     def __init__(self, game, x, y, platform_width):
@@ -21,4 +20,5 @@ class Platform(object):
         pass
 
     def draw(self, ):
+        self.platform = pygame.Rect(self.x, self.y, self.platform_width, self.platform_height)
         pygame.draw.rect(self.game.screen, self.color, self.platform)

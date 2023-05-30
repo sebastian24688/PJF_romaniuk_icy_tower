@@ -6,7 +6,7 @@ class Player(object):
     def __init__(self, game):
         # inicjalizacja
         self.game = game
-        self.position = Vector2(self.game.screen_x / 4, 100)
+        self.position = Vector2(self.game.screen_x / 2, self.game.screen_y - 150)
         self.mario_width = 51
         self.mario_hight = 67
 
@@ -16,6 +16,7 @@ class Player(object):
         self.velocity = 0
         self.drag = 0.5
         self.temp = 0
+        self.slide = 0
 
         # obrazy
         mario = pygame.image.load("obrazki/mario2.png").convert_alpha()
@@ -55,20 +56,22 @@ class Player(object):
                 platform.under_player = True
             if self.position[1] + self.mario_hight - 10 > platform.y:
                 platform.under_player = False
-`
+
             if pygame.Rect.colliderect(platform.platform, self.contour):
                 if self.velocity > 0 and platform.under_player is True:
                     self.velocity = -3.2
-                    print("{} + {} > {}".format(self.position[1], self.mario_hight, platform.y))
+                    # print("{} + {} > {}".format(self.position[1], self.mario_hight, platform.y))
 
         # odbicie od podłogi
         if self.position[1] > self.game.screen_x - 100 - 67:
             self.velocity = -3.2
 
-        # bezwładność boczna
-
-        # ruch
-        self.position[1] += self.velocity
+        # ruch oraz wartość przesunięcia platform
+        if self.position[1] <= 300 and self.velocity < 0:
+            self.slide = self.velocity
+        else:
+            self.slide = 0
+            self.position[1] += self.velocity
 
 
     def draw(self):

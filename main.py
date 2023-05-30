@@ -19,15 +19,19 @@ class Game(object):
         offtop = 40
         y_position = self.screen_y - 100
         self.player = Player(self)
+        self.slide_border = 300
+        self.background_y = 0
 
-        for i in range(4):
+        for i in range(8):
             x = random.randint(100, 600)
             y_position = y_position - min_distance - random.randint(0, offtop)
             width = random.randint(70, 150)
             self.platforms.append(Platform(self, x, y_position, width))
 
         # obrazy
-        self.tlo = pygame.image.load("obrazki/tlo2.png").convert()
+        self.background1 = pygame.image.load("obrazki/tlo2.png").convert()
+        self.background2 = pygame.image.load("obrazki/tlo2.png").convert()
+        self.granica = pygame.Rect(100, 0, 600, 300)
 
         while True:
             # zegar
@@ -40,6 +44,21 @@ class Game(object):
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     sys.exit(0)
 
+            # przesuwanie tła i platform
+            y_position -= self.player.slide
+            for platform in self.platforms:
+                platform.y -= self.player.slide
+                if platform.y > self.screen_y + 50:
+                    self.platforms.remove(platform)
+                    x = random.randint(100, 600)
+                    y_position = y_position - min_distance - random.randint(0, offtop)
+                    width = random.randint(70, 150)
+                    self.platforms.append(Platform(self, x, y_position, width))
+            self.background_y = self.background_y % self.screen_y
+            self.background_y -= self.player.slide
+
+
+
             # zdarzenia
             self.tick()
             self.draw()
@@ -49,11 +68,13 @@ class Game(object):
         self.player.tick()
 
     def draw(self):
-        self.screen.blit(self.tlo, (0, 0))
+        self.screen.blit(self.background1, (0, self.background_y))
+        self.screen.blit(self.background1, (0, self.background_y-800))
         self.platrorma_startowa.draw()
         for i in self.platforms:
             i.draw()
         self.player.draw()
+        pygame.draw.rect(self.screen, (255,255,255),self.granica,2)
 
 
 Game()
