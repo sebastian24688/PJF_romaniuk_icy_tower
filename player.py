@@ -1,14 +1,19 @@
 import pygame
 from pygame.math import Vector2
+from my_control import Control
 
 
 class Player(object):
     def __init__(self, game):
         # inicjalizacja
         self.game = game
+        self.control = Control()
+        print("siemena")
         self.position = Vector2(self.game.screen_x / 2, self.game.screen_y - 150)
         self.mario_width = 51
         self.mario_hight = 67
+        self.skip = 0
+        self.pressed = 'S'
 
         # parametry
         self.speed_x = 3
@@ -25,7 +30,12 @@ class Player(object):
         self.contour = pygame.Rect(self.position[0], self.position[1], self.mario_width, self.mario_hight)
 
     def tick(self):
+        self.skip = (self.skip + 1) % 7
+        if self.skip == 0:
+            self.control.tick()
+            self.pressed = self.control.pozycja()
         # ruch prawo/lewo
+        """        
         pressed = pygame.key.get_pressed()
         if pressed[pygame.K_LEFT]:
             # ściana lewa
@@ -39,6 +49,22 @@ class Player(object):
                 self.temp = self.speed_x
             self.inverted = False
             # self.speed_y = 1
+        """
+
+        # ruch prawo/lewo
+        if self.pressed == 'L':
+            # ściana lewa
+            if self.position[0] > 100:
+                self.temp = -self.speed_x
+            self.inverted = True
+            # self.speed_y = -1
+        if self.pressed == 'P':
+            # ściana prawa
+            if self.position[0] < 700 - self.mario_width:
+                self.temp = self.speed_x
+            self.inverted = False
+            # self.speed_y = 1"""
+
 
         if self.temp > 0:
             self.temp -= self.drag

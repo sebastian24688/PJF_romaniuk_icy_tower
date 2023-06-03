@@ -1,8 +1,9 @@
 import pygame, sys, random
 from player import Player
-from platform import Platform
+from my_platform import Platform
+import cv2 as cv2
 
-class Game(object):
+class Game:
     def __init__(self):
         # parametry
         self.screen_x = 800
@@ -12,6 +13,7 @@ class Game(object):
         # inicjalizacja
         pygame.init()
         self.screen = pygame.display.set_mode((self.screen_x, self.screen_y))
+        pygame.display.set_caption("Icy Tower")
         self.clock = pygame.time.Clock()
         self.platrorma_startowa = Platform(self, 100, self.screen_y - 100, 600)
         self.platforms = []
