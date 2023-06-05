@@ -13,6 +13,7 @@ class Control:
 
         self.contours = None
         self.x = None
+        self.last_x = 400
 
     def tick(self):
         ret, frame = self.cap.read()  # odczytanie ramki
@@ -38,17 +39,14 @@ class Control:
             cv2.circle(mask, (int(x), int(y)), int(radius), (255, 255, 255), 2)
 
         # Wyświetlanie ramki
-        cv2.imshow('Wykryte czerwone koła', mask)
+        cv2.imshow('Analiza obrazu', mask)
 
-        # self.cap.release()
-        # cv2.destroyAllWindows()
-
-    def pozycja(self):
+    def position(self):
+        polozenie = 'S'
         if len(self.contours) == 0:
-            # print("Brak wykrytego czerwonego koła. Obiekt jest w drugiej części")
-            polozenie = 'S'
-
-        if self.x < self.parts // 2 * self.part_width:
+            # print("Brak wykrytego czerwonego obiektu")
+            pass
+        elif self.x < self.parts // 2 * self.part_width:
             polozenie = 'L'
             # print("Lewo")
         elif self.x < (self.parts // 2 + 1) * self.part_width:
@@ -59,3 +57,18 @@ class Control:
             # print("Prawo")
 
         return polozenie
+
+    def position2(self):
+        self.x += 100
+        if 101 < self.x < 651:
+            self.last_x = self.x
+            print(self.x)
+            return self.x
+        else:
+            print(self.last_x)
+            return self.last_x
+
+
+    def remove(self):
+        self.cap.release()
+        cv2.destroyAllWindows()
